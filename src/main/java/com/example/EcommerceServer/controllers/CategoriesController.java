@@ -1,7 +1,7 @@
 package com.example.EcommerceServer.controllers;
 
 
-import com.example.EcommerceServer.models.categories;
+import com.example.EcommerceServer.models.Category;
 import com.example.EcommerceServer.repository.CategoriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,9 +19,9 @@ public class CategoriesController {
     private CategoriesRepository categoriesRepository;
 
     @GetMapping
-    public List<categories> getAllCategories() {
-        List<categories> categories =  categoriesRepository.findAll();
-        for (categories category : categories) {
+    public List<Category> getAllCategories() {
+        List<Category> categories =  categoriesRepository.findAll();
+        for (Category category : categories) {
             category.setImage("http://localhost:8080/api/images/categories/" + category.getImage() + ".png");
         }
         return categories;

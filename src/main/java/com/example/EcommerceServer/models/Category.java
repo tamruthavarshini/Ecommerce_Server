@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "categories")
-public class categories {
+public class Category {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -12,20 +13,11 @@ public class categories {
     private String name;
     private String image;
 
+    public Category() {}
 
-    public categories() {}
-
-    public categories(Long id, String name, String image) {
+    public Category(Long id, String name, String image) {
         this.id = id;
         this.name = name;
-        this.image = image;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
         this.image = image;
     }
 
@@ -35,4 +27,6 @@ public class categories {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    }
+    public String getImage() { return image; }
+    public void setImage(String image) { this.image = image; }
+}
