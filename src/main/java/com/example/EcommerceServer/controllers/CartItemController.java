@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -49,10 +50,16 @@ public class CartItemController {
         }
         Product product = productRepository.findById(requestDto.productId()).orElse(null);
 
+
         if (product == null) {
             return ResponseEntity.badRequest().body(new ResponseMessageDto("Invalid product ID."));
         }
-
+        CartItem cartItem1 = cartItemRepository.findByProductAndUser(product, user);
+        System.out.println("cartItem1"+cartItem1);
+        if(cartItem1!=null)
+        {
+            return ResponseEntity.ok(new ResponseMessageDto("Product added to cart successfully."));
+        }
 
         CartItem cartItem = new CartItem();
         cartItem.setProduct(product);
@@ -135,12 +142,13 @@ public class CartItemController {
         String username = tokenService.decodeJWT(jwt);
         User user = userRepository.findByUsername(username)
                 .orElse(null);
-
+System.out.println("deleet product from cart"+user);
         if (user == null) {
             return ResponseEntity.badRequest().body(new ResponseMessageDto("Invalid token or user."));
         }
 
         Product product = productRepository.findById(productId).orElse(null);
+        System.out.println("deleet product from cart"+product);
         if (product == null) {
             return ResponseEntity.badRequest().body(new ResponseMessageDto("Invalid product ID."));
         }
@@ -171,5 +179,31 @@ public class CartItemController {
 System.out.println(cartitem.getProduct().getImage1());
         }
         return ResponseEntity.ok(cartItem);
+    }
+    @GetMapping("/check")
+    public ResponseEntity<ResponseMessageDto> checkProductInCart(
+            @RequestHeader("Authorization") String token,
+            @RequestParam Long productId,
+            @RequestParam String variant) {
+        String jwt = token.startsWith("Bearer ") ? token.substring(7) : token;
+        String username = tokenService.decodeJWT(jwt);
+        User user = userRepository.findByUsername(username)
+                .orElse(null);
+
+        if (user == null) {
+            return ResponseEntity.badRequest().body(new ResponseMessageDto("Invalid token or user."));
+        }
+
+        Product product = productRepository.findById(productId).orElse(null);
+        if (product == null) {
+            return ResponseEntity.badRequest().body(new ResponseMessageDto("Invalid product ID."));
+        }
+
+        CartItem cartItem = cartItemRepository.findByProductAndUserAndVariant(product, user, variant);
+        if (cartItem != null) {
+            return ResponseEntity.ok(new ResponseMessageDto("Yes"));
+        } else {
+            return ResponseEntity.ok(new ResponseMessageDto("No"));
+        }
     }
 }

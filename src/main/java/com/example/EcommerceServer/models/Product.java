@@ -22,11 +22,14 @@ public class Product {
     private float discount;
     private String variants;
 
+    @Column(name = "merchant_id") // New merchant ID field
+    private long merchantId;
+
     public Product() {}
 
     public Product(int productId, Category category, String brand, String description, float cost,
                    String image1, String image2, String image3, String image4, String image5,
-                   float discount, String variants) {
+                   float discount, String variants, long merchantId) {
         this.productId = productId;
         this.category = category;
         this.brand = brand;
@@ -39,6 +42,7 @@ public class Product {
         this.image5 = image5;
         this.discount = discount;
         this.variants = variants;
+        this.merchantId = merchantId;
     }
 
     public int getProductId() { return productId; }
@@ -76,4 +80,7 @@ public class Product {
 
     public String getVariants() { return variants; }
     public void setVariants(String variants) { this.variants = variants; }
+
+    public long getMerchantId() { return merchantId; }
+    public void setMerchantId(Long merchantId) { this.merchantId = merchantId; }
 }

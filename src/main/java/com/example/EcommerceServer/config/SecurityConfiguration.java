@@ -35,11 +35,10 @@ public class SecurityConfiguration  {
         return httpSecurity
                 .cors() // Enable CORS
                 .and()
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/images/upload")) // Disable CSRF for file upload
-
+                .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers( "/api/categories", "/api/images/**", "/api/products/**", "/api/auth/**").permitAll()
+                        .requestMatchers( "/api/categories", "/api/images/**", "/api/products/**", "/api/auth/**","/api/search/**").permitAll()
                         .anyRequest().authenticated())
                 .authenticationManager(authenticationManager)
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
